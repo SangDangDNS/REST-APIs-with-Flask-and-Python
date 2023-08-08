@@ -237,3 +237,86 @@ In the `Postman` add 2 more methods like below:
 
 ![img_6.png](imgs%2Fimg_6.png)  
 
+### Run a Flask App in a Docker Container
+
+First of all, install `Python` with `flask` already installed is with a `Dockerfile`  
+
+File `Dockerfile`
+
+```commandline
+FROM python:3.11
+EXPOSE 5000
+WORKDIR /app
+RUN pip install flask
+COPY . .
+ENTRYPOINT [ "flask", "run", "--host", "0.0.0.0" ]
+```
+
+Then, in the same directory as the `Dockerfile`, run the following two commands:  
+
+```commandline
+$ sudo docker build -t rest-api-flask-python .
+$ sudo docker run -it rest-api-flask-python
+```
+
+The result should like this:
+
+```commandline
+$ sudo docker build -t rest-api-flask-python .
+[+] Building 22.5s (9/9) FINISHED                                                                                                                                                      docker:default
+ => [internal] load build definition from Dockerfile                                                                                                                                             0.0s
+ => => transferring dockerfile: 160B                                                                                                                                                             0.0s
+ => [internal] load .dockerignore                                                                                                                                                                0.0s
+ => => transferring context: 2B                                                                                                                                                                  0.0s
+ => [internal] load metadata for docker.io/library/python:3.11                                                                                                                                   3.1s
+ => [1/4] FROM docker.io/library/python:3.11@sha256:9a1b705aecedc76e8bf87dfca091d7093df3f2dd4765af6c250134ce4298a584                                                                            15.5s
+ => => resolve docker.io/library/python:3.11@sha256:9a1b705aecedc76e8bf87dfca091d7093df3f2dd4765af6c250134ce4298a584                                                                             0.0s
+ => => sha256:608c79ebc6d50c0de774945744542f1ac114478446b0b35ad4a15c3198743113 7.53kB / 7.53kB                                                                                                   0.0s
+ => => sha256:9a1b705aecedc76e8bf87dfca091d7093df3f2dd4765af6c250134ce4298a584 2.14kB / 2.14kB                                                                                                   0.0s
+ => => sha256:0ad2659187130a5b7a8094996b4f240078b97be75a5395fa9869ca0a178fa676 2.01kB / 2.01kB                                                                                                   0.0s
+ => => sha256:bd36c7bfe5f4bdffcc0bbb74b0fb38feb35c286ea58b5992617fb38b0c933603 64.11MB / 64.11MB                                                                                                 6.2s
+ => => sha256:785ef8b9b236a5f027f33cae77513051704c0538bff455ff5548105c954c3b1c 49.56MB / 49.56MB                                                                                                 3.8s
+ => => sha256:5a6dad8f55ae6c733e986316bd08205c8b2c41640bf8d08ff6e9bbcb6884304f 24.03MB / 24.03MB                                                                                                 2.5s
+ => => sha256:4d207285f6d296b9806bd00340437406c25207412c52fcfcbf229a5ecff7bf94 211.03MB / 211.03MB                                                                                              11.4s
+ => => extracting sha256:785ef8b9b236a5f027f33cae77513051704c0538bff455ff5548105c954c3b1c                                                                                                        0.9s
+ => => sha256:9402da1694b8dae94a0cb89a2719ce24a909e809b22c31d39edee8e18b3d300b 6.39MB / 6.39MB                                                                                                   4.6s
+ => => sha256:9bdbf45d01af5880bbab0120b825cc0f237835fd253f54a79b396519ea250daf 19.76MB / 19.76MB                                                                                                 6.5s
+ => => extracting sha256:5a6dad8f55ae6c733e986316bd08205c8b2c41640bf8d08ff6e9bbcb6884304f                                                                                                        0.3s
+ => => extracting sha256:bd36c7bfe5f4bdffcc0bbb74b0fb38feb35c286ea58b5992617fb38b0c933603                                                                                                        1.2s
+ => => sha256:dd8b7ef87a9d8f73f1da40f467d7878182e591a6ab390005d401c4e59928c8e2 244B / 244B                                                                                                       6.5s
+ => => sha256:4de52e7027c53cdd2ad280aed34a7fb1b8ccb8143bd1ed4678f25a4d7020b5fa 3.09MB / 3.09MB                                                                                                   7.1s
+ => => extracting sha256:4d207285f6d296b9806bd00340437406c25207412c52fcfcbf229a5ecff7bf94                                                                                                        3.1s
+ => => extracting sha256:9402da1694b8dae94a0cb89a2719ce24a909e809b22c31d39edee8e18b3d300b                                                                                                        0.1s
+ => => extracting sha256:9bdbf45d01af5880bbab0120b825cc0f237835fd253f54a79b396519ea250daf                                                                                                        0.3s
+ => => extracting sha256:dd8b7ef87a9d8f73f1da40f467d7878182e591a6ab390005d401c4e59928c8e2                                                                                                        0.0s
+ => => extracting sha256:4de52e7027c53cdd2ad280aed34a7fb1b8ccb8143bd1ed4678f25a4d7020b5fa                                                                                                        0.1s
+ => [internal] load build context                                                                                                                                                                0.2s
+ => => transferring context: 23.18MB                                                                                                                                                             0.1s
+ => [2/4] WORKDIR /app                                                                                                                                                                           0.3s
+ => [3/4] RUN pip install flask                                                                                                                                                                  3.1s
+ => [4/4] COPY . .                                                                                                                                                                               0.2s
+ => exporting to image                                                                                                                                                                           0.2s
+ => => exporting layers                                                                                                                                                                          0.2s
+ => => writing image sha256:a8747debb9db865c5b831f8b6cfddd273ebb17291f5f39f77704c2ffc27a016a                                                                                                     0.0s
+ => => naming to docker.io/library/rest-api-flask-python                                                  
+``` 
+
+Check docker images by this command: `sudo docker images`
+
+```commandline
+$ sudo docker images
+REPOSITORY                                      TAG       IMAGE ID       CREATED              SIZE
+rest-api-flask-python                           latest    a8747debb9db   About a minute ago   1.05GB
+```
+
+```commandline
+$ sudo docker run -it rest-api-flask-python
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.0.2:5000
+Press CTRL+C to quit
+```
+
+As we can see this address "http://172.17.0.2:5000". It is the address of container docker.
