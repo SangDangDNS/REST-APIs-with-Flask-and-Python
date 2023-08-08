@@ -81,6 +81,7 @@ I will use the `Postman Desktop` to test my API.
 
 ![img_1.png](imgs%2Fimg_1.png)
 
+#### Create new Store  
 Next, I will create the new store by methode `POST`
 File `app.py`
 ```commandline
@@ -120,3 +121,119 @@ Run again, and in the `Postman desktop`, crate new method `POST` to create new s
 When send that method, we check again my store by method `GET`  
 
 ![img_3.png](imgs%2Fimg_3.png)
+
+#### Create new Item  
+Now, we will create new item in Store by adding the new method `POST`
+
+File `app.py`
+```
+from flask import Flask, request
+
+app = Flask(__name__)
+
+stores = [
+    {
+        "name": "My Store",
+        "items": [
+            {
+                "name": "Chair",
+                "price": 15.99
+            }
+        ]
+    }
+]
+
+@app.get("/store")
+def get_store():
+    return {"stores": stores}
+
+
+@app.post("/store")
+def create_store():
+    request_data = request.get_json()
+    new_store = {"name": request_data["name"], "items": []}
+    stores.append(new_store)
+    return new_store, 201
+
+
+@app.post("/store/<string:name>/item")
+def create_item(name):
+    request_data = request.get_json()
+    for store in stores:
+        if store["name"] == name:
+            new_item = {"name": request_data["name"], "price": request_data["price"]}
+            store["items"].append(new_item)
+            return new_item, 201
+    return {"message": "Store not found"}, 404
+```
+In `Postman Desktop`, create new method `POST`  
+
+![img_4.png](imgs%2Fimg_4.png)  
+
+#### Get a specific store and the store items  
+
+File `app.py`  
+
+```commandline
+from flask import Flask, request
+
+app = Flask(__name__)
+
+stores = [
+    {
+        "name": "My Store",
+        "items": [
+            {
+                "name": "Chair",
+                "price": 15.99
+            }
+        ]
+    }
+]
+
+@app.get("/store")
+def get_store():
+    return {"stores": stores}
+
+
+@app.post("/store")
+def create_store():
+    request_data = request.get_json()
+    new_store = {"name": request_data["name"], "items": []}
+    stores.append(new_store)
+    return new_store, 201
+
+
+@app.post("/store/<string:name>/item")
+def create_item(name):
+    request_data = request.get_json()
+    for store in stores:
+        if store["name"] == name:
+            new_item = {"name": request_data["name"], "price": request_data["price"]}
+            store["items"].append(new_item)
+            return new_item, 201
+    return {"message": "Store not found"}, 404
+
+
+@app.get("/store/<string:name>")
+def get_store_(name):
+    for store in stores:
+        if store["name"] == name:
+            return store
+    return {"message": "Store not found"}, 404
+
+
+@app.get("/store/<string:name>/item")
+def get_item_in_store(name):
+    for store in stores:
+        if store["name"] == name:
+            return {"items": store["items"], "message": "You rock!"}
+    return {"message": "Store not found"}, 404
+```
+
+In the `Postman` add 2 more methods like below:
+
+![img_5.png](imgs%2Fimg_5.png)
+
+![img_6.png](imgs%2Fimg_6.png)  
+
